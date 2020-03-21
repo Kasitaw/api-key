@@ -2,7 +2,6 @@
 
 namespace Kasitaw\ApiKey;
 
-use App\ApiKey;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Contracts\Auth\UserProvider;
@@ -26,10 +25,14 @@ class UserTokenProvider implements UserProvider
 
     public function retrieveByToken($identifier, $apiKey)
     {
-        $apiKey = $this->apiKey->with('user')->where($identifier, $apiKey)->first();
-        dd($apiKey);
+        $apiKey = $this
+            ->apiKey
+            ->with('authenticable')
+            ->active()
+            ->where($identifier, $apiKey)
+            ->first();
 
-        return $apiKey && $apiKey->user ? $apiKey->user : null;
+        return $apiKey && $apiKey->authenticable ? $apiKey->authenticable : null;
     }
 
     public function updateRememberToken(Authenticatable $user, $apiKey)

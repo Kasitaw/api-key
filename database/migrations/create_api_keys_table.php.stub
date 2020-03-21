@@ -15,7 +15,7 @@ class CreateApiKeysTable extends Migration
     {
         Schema::create('api_keys', function (Blueprint $table) {
             $table->uuid('id');
-            $table->morph('model');
+            $table->morphs('model');
             $table->text('key');
             $table->boolean('status')->default(true);
             $table->timestamp('last_access_at');

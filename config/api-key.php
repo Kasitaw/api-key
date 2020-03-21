@@ -7,5 +7,5 @@ return [
 
     'table_name' => [
         'api_keys' => 'api_keys',
-    ]
+    ],
 ];

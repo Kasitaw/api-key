@@ -10,10 +10,25 @@ class ApiGuard
 {
     use GuardHelpers;
 
+    /**
+     * Key that will check in request.
+     *
+     * @var mixed|string
+     */
     private $inputKey;
 
+    /**
+     * Key that will be check in database table.
+     *
+     * @var mixed|string
+     */
     private $storageKey;
 
+    /**
+     * Request object.
+     *
+     * @var \Illuminate\Http\Request
+     */
     private $request;
 
     public function __construct(UserProvider $provider, Request $request, $configuration)
@@ -21,30 +36,39 @@ class ApiGuard
         $this->provider = $provider;
         $this->request = $request;
 
-        // key to check in request
-        $this->inputKey = isset($configuration['input_key']) ? $configuration['input_key'] : 'api_token';
+        // Key to check in request
+        $this->inputKey = $configuration['input_key']
+            ?? 'api_token';
 
-        // key to check in database
-        $this->storageKey = isset($configuration['storage_key']) ? $configuration['storage_key'] : 'api_token';
+        // Key to check in database
+        $this->storageKey = $configuration['storage_key']
+            ?? 'api_token';
     }
 
+    /**
+     * Get the user based on token.
+     *
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
     public function user()
     {
         if (!is_null($this->user)) {
             return $this->user;
         }
 
-        $user = null;
-
-        // retrieve via token
-        $token = $this->getTokenForRequest();
-
-        if (!empty($token)) {
-            // the token was found, how you want to pass?
-            $user = $this->provider->retrieveByToken($this->storageKey, $token);
+        if ($token = $this->getTokenForRequest()) {
+            // Retrieve user by provided token
+            $user = $this->provider->retrieveByToken(
+                $this->storageKey,
+                $token
+            );
         }
 
-        return $this->user = $user;
+        if ($user) {
+            $this->setUser($user);
+        }
+
+        return $user;
     }
 
     /**

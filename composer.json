@@ -4,10 +4,10 @@
     "keywords": ["kasitaw", "api-key", "api-integration", "api"],
     "require": {
         "php": ">=7",
-        "illuminate/support": "^7.2"
+        "illuminate/support": "^6.0"
     },
     "require-dev": {
-        "laravel/framework": "^7.2",
+        "laravel/framework": "^6.0",
         "phpunit/phpunit": "^9.0",
         "orchestra/testbench": "^5.1"
     },
