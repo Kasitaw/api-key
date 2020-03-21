@@ -2,6 +2,7 @@
 
 namespace Kasitaw\ApiKey;
 
+use Illuminate\Support\Str;
 use Kasitaw\ApiKey\Traits\HasApiKey;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +11,19 @@ class ApiKey extends Model
     use HasApiKey;
 
     public $incrementing = false;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        /**
+         * Generate uuid.
+         */
+        static::creating(function ($model) {
+            $model->incrementing = false;
+            $model->{$model->getKeyName()} = Str::uuid()->toString();
+        });
+    }
 
     /**
      * Get underlying "model" that ties up to the api key.
