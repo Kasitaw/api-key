@@ -40,7 +40,7 @@ trait HasApiKey
     public function revokeKeyByKey(...$keys)
     {
         return $this->setStatusToSome(
-            'key',
+            config('api-key.columns.key') ?? 'key',
             $keys,
             false
         );
@@ -73,15 +73,19 @@ trait HasApiKey
     {
         do {
             $flag = true;
-            $apiKey = Str::random(80);
+            $apiKey = Str::random(config('api-key.key_length'));
 
-            if (!DB::table(config('api-key.table_name.api_keys'))->where('key', $apiKey)->exists()) {
+            $existingKey = DB::table(config('api-key.table_name.api_keys'))
+                ->where(config('api-key.columns.key') ?? 'key', $apiKey)
+                ->exists();
+
+            if (!$existingKey) {
                 $flag = false;
             }
         } while ($flag);
 
         $apiKey = $this->api_keys()->create([
-            'key' => $apiKey,
+            config('api-key.columns.key') ?? 'key' => $apiKey,
             'status' => $status,
         ]);
 
@@ -108,7 +112,7 @@ trait HasApiKey
     public function activateKeyByKey(...$keys)
     {
         return $this->setStatusToSome(
-            'key',
+            config('api-key.columns.key') ?? 'key',
             $keys,
             true
         );
@@ -128,6 +132,64 @@ trait HasApiKey
             $uuid,
             true
         );
+    }
+
+    /**
+     * Delete all api keys.
+     *
+     * @return mixed
+     */
+    public function removeAllKeys()
+    {
+        return $this->api_keys()->delete();
+    }
+
+    /**
+     * Delete key by "key".
+     *
+     * @param mixed ...$keys
+     *
+     * @return \Kasitaw\ApiKey\Traits\HasApiKey
+     */
+    public function removeKeyByKey(...$keys)
+    {
+        return $this->deleteKeys(
+            config('api-key.columns.key') ?? 'key',
+            $keys
+        );
+    }
+
+    /**
+     * Delete key by "uuid".
+     *
+     * @param mixed ...$uuid
+     *
+     * @return \Kasitaw\ApiKey\Traits\HasApiKey
+     */
+    public function removeKeyByUuid(...$uuid)
+    {
+        return $this->deleteKeys(
+            'uuid',
+            $uuid
+        );
+    }
+
+    /**
+     * Check whether key is active. Return null of "key" does not exist.
+     *
+     * @param $keyOrUuid
+     *
+     * @return bool|null
+     */
+    public function isKeyActive($keyOrUuid)
+    {
+        $key = $this
+            ->api_keys()
+            ->where(config('api-key.columns.key') ?? 'key', $keyOrUuid)
+            ->orWhere('uuid', $keyOrUuid)
+            ->first();
+
+        return $key ? (true === $key->status) : null;
     }
 
     /**
@@ -173,11 +235,31 @@ trait HasApiKey
 
         $this
             ->api_keys()
-            ->whereIn($keyType, $this->flatten($identifiers))
+            ->whereIn($keyType, $identifiers)
             ->update([
                 'status' => $status,
             ]);
 
         return true;
+    }
+
+    /**
+     * Base method to delete the key.
+     *
+     * @param string $keyType
+     * @param array $keyOrUuid
+     *
+     * @return $this
+     */
+    private function deleteKeys(string $keyType, array $keyOrUuid)
+    {
+        $identifiers = $this->flatten($keyOrUuid);
+
+        $this
+            ->api_keys()
+            ->whereIn($keyType, $identifiers)
+            ->delete();
+
+        return $this;
     }
 }

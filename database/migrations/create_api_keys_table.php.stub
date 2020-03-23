@@ -13,10 +13,10 @@ class CreateApiKeysTable extends Migration
      */
     public function up()
     {
-        Schema::create('api_keys', function (Blueprint $table) {
+        Schema::create(config('api-key.table_name.api_keys'), function (Blueprint $table) {
             $table->uuid('id');
             $table->morphs('model');
-            $table->text('key');
+            $table->text(config('api-key.columns.key'));
             $table->boolean('status')->default(true);
             $table->timestamp('last_access_at');
             $table->timestamps();
@@ -31,6 +31,6 @@ class CreateApiKeysTable extends Migration
      */
     public function down()
     {
-        Schema::drop('api_keys');
+        Schema::drop(config('api-key.table_name.api_keys'));
     }
 }

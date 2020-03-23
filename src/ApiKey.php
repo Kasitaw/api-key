@@ -12,6 +12,14 @@ class ApiKey extends Model
 
     public $incrementing = false;
 
+    protected $guarded = [];
+
+    protected $dates = ['last_access_at'];
+
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -61,5 +69,15 @@ class ApiKey extends Model
     public function scopeInActive($query)
     {
         return $query->where('status', false);
+    }
+
+    /**
+     * Check whether key is active or inactive;.
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        return true === $this->status;
     }
 }

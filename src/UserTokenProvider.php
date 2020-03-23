@@ -25,14 +25,10 @@ class UserTokenProvider implements UserProvider
 
     public function retrieveByToken($identifier, $apiKey)
     {
-        $apiKey = $this
-            ->apiKey
+        return $this->apiKey
             ->with('authenticable')
-            ->active()
             ->where($identifier, $apiKey)
             ->first();
-
-        return $apiKey && $apiKey->authenticable ? $apiKey->authenticable : null;
     }
 
     public function updateRememberToken(Authenticatable $user, $apiKey)

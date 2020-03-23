@@ -2,6 +2,7 @@
 
 namespace Kasitaw\ApiKey\Guards;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\UserProvider;
@@ -37,12 +38,10 @@ class ApiGuard
         $this->request = $request;
 
         // Key to check in request
-        $this->inputKey = $configuration['input_key']
-            ?? 'api_token';
+        $this->inputKey = config('api-key.request_key.api_key') ?? 'api_key';
 
         // Key to check in database
-        $this->storageKey = $configuration['storage_key']
-            ?? 'api_token';
+        $this->storageKey = config('api-key.columns.key') ?? 'key';
     }
 
     /**
@@ -56,19 +55,24 @@ class ApiGuard
             return $this->user;
         }
 
+        $apiKey = null;
+
         if ($token = $this->getTokenForRequest()) {
             // Retrieve user by provided token
-            $user = $this->provider->retrieveByToken(
+            $apiKey = $this->provider->retrieveByToken(
                 $this->storageKey,
                 $token
             );
         }
 
-        if ($user) {
-            $this->setUser($user);
+        if ($apiKey) {
+            $this->setUser($apiKey->authenticable);
+
+            $apiKey->last_access_at = Carbon::now();
+            $apiKey->save();
         }
 
-        return $user;
+        return $apiKey->authenticable;
     }
 
     /**
