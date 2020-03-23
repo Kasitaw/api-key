@@ -111,7 +111,7 @@ class User extends Authenticatable
 }
 ```
 
-And finally, call it in middleware as following:
+Call endpoint with middleware as following:
 
 ```php
 // Using `auth:api` as regular user authentication
@@ -126,6 +126,14 @@ Route::get('/external/intergation/users', function() {
     // or using auth('api_key')->user()
 })->middleware('auth:api_key');
 ```
+
+Finally, lets authenticate. 3 ways to pass in the generated `key`
+
+1. Using query params. `i.e /users?api_key=xxx`
+2. Using http body. `i.e api_key = xxx`
+3. Using `Authorization` header. `i.e Authorization Bearer xxx`
+
+> Notes: The request header should be provide `Accept` header. i.e `Accept: application/json`
 
 ## Available Methods to manage the `key`
 
