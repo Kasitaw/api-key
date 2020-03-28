@@ -18,7 +18,7 @@ class CreateApiKeysTable extends Migration
             $table->morphs('model');
             $table->text(config('api-key.columns.key'));
             $table->boolean('status')->default(true);
-            $table->timestamp('last_access_at');
+            $table->timestamp('last_access_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

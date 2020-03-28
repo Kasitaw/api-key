@@ -273,5 +273,15 @@ $key = 'J1VFYTgUafp21ljEkanJYYnlY1j4REURXgAKzlwAUxABfCWPw4PBw9HKYbG4GWNvi125WUO0
 $user->isKeyActive($key);
 ```
 
+## Test
+
+Run test with following command
+
+```
+vendor/bin/phpunit --testdox --verbose
+```
+
+## License
+This package is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 

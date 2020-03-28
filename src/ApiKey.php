@@ -5,16 +5,24 @@ namespace Kasitaw\ApiKey;
 use Illuminate\Support\Str;
 use Kasitaw\ApiKey\Traits\HasApiKey;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ApiKey extends Model
 {
     use HasApiKey;
+    use SoftDeletes;
 
     public $incrementing = false;
 
     protected $guarded = [];
 
-    protected $dates = ['last_access_at'];
+    protected $primaryKey = 'uuid';
+
+    protected $keyType = 'string';
+
+    protected $dates = [
+        'last_access_at',
+    ];
 
     protected $casts = [
         'status' => 'boolean',

@@ -64,15 +64,16 @@ class ApiGuard
                 $token
             );
         }
-
         if ($apiKey) {
             $this->setUser($apiKey->authenticable);
 
             $apiKey->last_access_at = Carbon::now();
             $apiKey->save();
+
+            return $apiKey->authenticable;
         }
 
-        return $apiKey->authenticable;
+        return null;
     }
 
     /**
@@ -97,8 +98,6 @@ class ApiGuard
 
     /**
      * Validate a user's credentials.
-     *
-     * @param array $credentials
      *
      * @return bool
      */

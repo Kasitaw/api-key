@@ -65,8 +65,6 @@ trait HasApiKey
     /**
      * Generate new key.
      *
-     * @param bool $status
-     *
      * @return \Illuminate\Database\Eloquent\Model|string
      */
     public function generateNewKey(bool $status = true)
@@ -195,8 +193,6 @@ trait HasApiKey
     /**
      * Base function to set the status.
      *
-     * @param bool $status
-     *
      * @return $this
      */
     private function setStatusToAll(bool $status = true)
@@ -211,8 +207,6 @@ trait HasApiKey
     /**
      * Flatten the multi array into flat view.
      *
-     * @param array $input
-     *
      * @return array
      */
     private function flatten(array $input)
@@ -222,10 +216,6 @@ trait HasApiKey
 
     /**
      * Base method to set status(active or inactive) for some keys.
-     *
-     * @param string $keyType
-     * @param array $keyOrUuid
-     * @param bool $status
      *
      * @return bool
      */
@@ -245,9 +235,6 @@ trait HasApiKey
 
     /**
      * Base method to delete the key.
-     *
-     * @param string $keyType
-     * @param array $keyOrUuid
      *
      * @return $this
      */

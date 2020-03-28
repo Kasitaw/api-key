@@ -1,6 +1,6 @@
 {
     "name": "kasitaw/api-key",
-    "description": "User defined api key to communicate with Kasitaw using machine-to-machine concept. Mostly for external integration",
+    "description": "User defined api key(using custom laravel guard) to enable client communicate with server for external integration in general",
     "keywords": ["kasitaw", "api-key", "api-integration", "api"],
     "require": {
         "php": ">=7",
@@ -9,7 +9,8 @@
     "require-dev": {
         "laravel/framework": "^6.0",
         "phpunit/phpunit": "^9.0",
-        "orchestra/testbench": "^5.1"
+        "orchestra/testbench": "^4.0",
+        "friendsofphp/php-cs-fixer": "^2.16"
     },
     "autoload": {
         "psr-4": {
@@ -27,6 +28,14 @@
                 "Kasitaw\\ApiKey\\ApiKeyServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "format": [
+            "vendor/bin/php-cs-fixer fix"
+        ],
+        "format-dry-run": [
+            "vendor/bin/php-cs-fixer fix --dry-run --diff"
+        ]
     },
     "license": "MIT",
     "authors": [

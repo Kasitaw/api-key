@@ -28,6 +28,7 @@ class UserTokenProvider implements UserProvider
         return $this->apiKey
             ->with('authenticable')
             ->where($identifier, $apiKey)
+            ->where('status', true)
             ->first();
     }
 
