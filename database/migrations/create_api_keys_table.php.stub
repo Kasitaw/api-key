@@ -14,7 +14,7 @@ class CreateApiKeysTable extends Migration
     public function up()
     {
         Schema::create(config('api-key.table_name.api_keys'), function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('uuid');
             $table->morphs('model');
             $table->text(config('api-key.columns.key'));
             $table->boolean('status')->default(true);
