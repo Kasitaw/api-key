@@ -3,13 +3,13 @@
     "description": "User defined api key(using custom laravel guard) to enable client communicate with server for external integration in general",
     "keywords": ["kasitaw", "api-key", "api-integration", "api"],
     "require": {
-        "php": ">=7",
-        "illuminate/support": "^6.0"
+        "php": ">=7.2",
+        "illuminate/support": "^7.0"
     },
     "require-dev": {
-        "laravel/framework": "^6.0",
-        "phpunit/phpunit": "^9.0",
-        "orchestra/testbench": "^4.0",
+        "laravel/framework": "^7.0",
+        "phpunit/phpunit": "^8.0|^9.0",
+        "orchestra/testbench": "^5.0",
         "friendsofphp/php-cs-fixer": "^2.16"
     },
     "autoload": {
