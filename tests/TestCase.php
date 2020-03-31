@@ -19,6 +19,17 @@ class TestCase extends Orchestra
         $this->withFactories(__DIR__ . '/../database/factories');
 
         $this->setUpDatabase($this->app);
+
+        /** @var \Illuminate\Routing\Router $router */
+        $router = $this->app['router'];
+
+        $router->get('/authorize/user', function () {
+            return request()->user();
+        })->middleware('auth:api_key');
+
+        $router->get('/unauthorized/user', function () {
+            return request()->user();
+        })->middleware('auth:api_key');
     }
 
     protected function getPackageProviders($app)
