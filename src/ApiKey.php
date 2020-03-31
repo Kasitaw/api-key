@@ -88,4 +88,32 @@ class ApiKey extends Model
     {
         return true === $this->status;
     }
+
+    /**
+     * Activate the current key.
+     *
+     * @return $this
+     */
+    public function activate()
+    {
+        $this->update([
+            'status' => true,
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * Revoke the current key.
+     *
+     * @return $this
+     */
+    public function revoke()
+    {
+        $this->update([
+            'status' => false,
+        ]);
+
+        return $this;
+    }
 }
