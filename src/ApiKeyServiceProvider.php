@@ -20,8 +20,6 @@ class ApiKeyServiceProvider extends ServiceProvider
             __DIR__ . '/../database/migrations/create_api_keys_table.php.stub' => $this->getMigrationFileName($filesystem),
         ], 'migrations');
 
-        $this->loadRoutesFrom(__DIR__ . '/../tests/TestRoute/TestRoute.php');
-
         Auth::extend('api_key', function ($app, $name, array $config) {
             // Automatically build the DI, put it as reference
             $userProvider = app(UserTokenProvider::class);
